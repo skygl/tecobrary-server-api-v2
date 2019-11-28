@@ -3,17 +3,17 @@ package com.woowacourse.tecobrary.librarybook.util;
 import com.woowacourse.tecobrary.common.model.BookCoverUrl;
 import com.woowacourse.tecobrary.common.model.BookInfo;
 import com.woowacourse.tecobrary.librarybook.domain.LibraryBook;
-import com.woowacourse.tecobrary.librarybook.ui.LibraryBookDto;
+import com.woowacourse.tecobrary.librarybook.ui.LibraryBookRequestDto;
 
 public class LibraryBookMapper {
 
-    public static LibraryBook map(final LibraryBookDto libraryBookDto) {
+    public static LibraryBook map(final LibraryBookRequestDto libraryBookRequestDto) {
         return new LibraryBook(
-                new BookCoverUrl(libraryBookDto.getImage()),
-                new BookInfo(libraryBookDto.getTitle(),
-                        libraryBookDto.getAuthor(),
-                        libraryBookDto.getPublisher(),
-                        libraryBookDto.getIsbn(),
-                        libraryBookDto.getDescription()));
+                new BookCoverUrl(libraryBookRequestDto.getImage()),
+                new BookInfo(libraryBookRequestDto.getTitle(),
+                        libraryBookRequestDto.getAuthor(),
+                        libraryBookRequestDto.getPublisher(),
+                        libraryBookRequestDto.getIsbn(),
+                        libraryBookRequestDto.getDescription()));
     }
 }

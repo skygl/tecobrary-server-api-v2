@@ -2,11 +2,12 @@ package com.woowacourse.tecobrary.librarybook.application;
 
 import com.woowacourse.tecobrary.common.model.BookCoverUrl;
 import com.woowacourse.tecobrary.common.model.BookInfo;
+import com.woowacourse.tecobrary.librarybook.common.LibraryBookStatic;
 import com.woowacourse.tecobrary.librarybook.domain.LibraryBook;
 import com.woowacourse.tecobrary.librarybook.domain.LibraryBookRepository;
 import com.woowacourse.tecobrary.librarybook.exception.DuplicatedLibraryBookException;
 import com.woowacourse.tecobrary.librarybook.ui.LibraryBookCreateResponseDto;
-import com.woowacourse.tecobrary.librarybook.ui.LibraryBookDto;
+import com.woowacourse.tecobrary.librarybook.ui.LibraryBookRequestDto;
 import com.woowacourse.tecobrary.librarybook.ui.LibraryBookTotalCountResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,14 +24,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
-class LibraryBookServiceTest {
+class LibraryBookServiceTest implements LibraryBookStatic {
 
-    private static final String IMAGE = "https://image.url";
-    private static final String TITLE = "제목";
-    private static final String AUTHOR = "작가";
-    private static final String PUBLISHER = "출판사";
-    private static final String ISBN = "19930705";
-    private static final String DESCRIPTION = "내용 없음";
     private static final long TOTAL_COUNT = 1_000_000L;
 
     @Mock
@@ -39,12 +34,12 @@ class LibraryBookServiceTest {
     @InjectMocks
     private LibraryBookService libraryBookService;
 
-    private LibraryBookDto libraryBookDto;
+    private LibraryBookRequestDto libraryBookRequestDto;
     private LibraryBook libraryBook;
 
     @BeforeEach
     void setUp() {
-        libraryBookDto = new LibraryBookDto(IMAGE, TITLE, AUTHOR, PUBLISHER, ISBN, DESCRIPTION);
+        libraryBookRequestDto = new LibraryBookRequestDto(IMAGE, TITLE, AUTHOR, PUBLISHER, ISBN, DESCRIPTION);
         libraryBook = new LibraryBook(
                 new BookCoverUrl(IMAGE),
                 new BookInfo(TITLE, AUTHOR, PUBLISHER, ISBN, DESCRIPTION)
@@ -58,7 +53,7 @@ class LibraryBookServiceTest {
         given(libraryBookRepository.save(any(LibraryBook.class))).willReturn(libraryBook);
         given(libraryBookRepository.existsByLibraryBookInfoIsbn(any(String.class))).willReturn(false);
 
-        LibraryBookCreateResponseDto libraryBookCreateResponseDto = libraryBookService.save(libraryBookDto);
+        LibraryBookCreateResponseDto libraryBookCreateResponseDto = libraryBookService.save(libraryBookRequestDto);
 
         assertThat(libraryBookCreateResponseDto.getId()).isEqualTo(libraryBook.getId());
         assertThat(libraryBookCreateResponseDto.getMessage()).isEqualTo(libraryBook.getTitle() + " register succeed");
@@ -70,7 +65,7 @@ class LibraryBookServiceTest {
         given(libraryBookRepository.save(any(LibraryBook.class))).willReturn(libraryBook);
         given(libraryBookRepository.existsByLibraryBookInfoIsbn(any(String.class))).willReturn(true);
 
-        assertThrows(DuplicatedLibraryBookException.class, () -> libraryBookService.save(libraryBookDto));
+        assertThrows(DuplicatedLibraryBookException.class, () -> libraryBookService.save(libraryBookRequestDto));
     }
 
     @DisplayName("총 도서 수를 조회한다.")
@@ -82,4 +77,19 @@ class LibraryBookServiceTest {
 
         assertThat(libraryBookTotalCountResponseDto.getTotal()).isEqualTo(TOTAL_COUNT);
     }
+
+//    @Test
+//    void readLibraryBook() {
+//        given(libraryBookRepository.findById(1L)).willReturn(Optional.of(libraryBook));
+//
+//        LibraryBookResponseDto libraryBookResponseDto = libraryBookService.findById(1L);
+//
+//        assertThat(libraryBookResponseDto.getId()).isEqualTo(1L);
+//        assertThat(libraryBookResponseDto.getTitle()).isEqualTo(TITLE);
+//        assertThat(libraryBookResponseDto.getAuthor()).isEqualTo(AUTHOR);
+//        assertThat(libraryBookResponseDto.getImage()).isEqualTo(IMAGE);
+//        assertThat(libraryBookResponseDto.getPublisher()).isEqualTo(PUBLISHER);
+//        assertThat(libraryBookResponseDto.getIsbn()).isEqualTo(ISBN);
+//        assertThat(libraryBookResponseDto.getDescription()).isEqualTo(DESCRIPTION);
+//    }
 }
