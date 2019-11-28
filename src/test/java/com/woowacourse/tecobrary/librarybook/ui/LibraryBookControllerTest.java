@@ -76,17 +76,4 @@ class LibraryBookControllerTest extends RestAssuredTestUtils implements LibraryB
                 body("isbn", is("0123")).
                 body("description", is("요약"));
     }
-
-    @DisplayName("[GET] /books/all, 총 도서 수를 조회한다.")
-    @Test
-    void readLibraryBookTotalCount() {
-        given().
-        when().
-                get(baseUrl("/books/all")).
-        then().
-                log().ifError().
-                statusCode(200).
-                contentType(JSON).
-                body("total", is(1));
-    }
 }

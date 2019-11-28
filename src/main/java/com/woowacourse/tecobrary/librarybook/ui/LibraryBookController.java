@@ -35,9 +35,4 @@ public class LibraryBookController {
     public ResponseEntity readLibraryBook(@PathVariable Long id) {
         return ResponseEntity.ok(new LibraryBookResponseDto(1L, "https://image.book", "제목", "작가", "출판사", "0123", "요약"));
     }
-
-    @GetMapping("/books/all")
-    public ResponseEntity readLibraryBookTotalCount() {
-        return ResponseEntity.ok(libraryBookService.count());
-    }
 }
