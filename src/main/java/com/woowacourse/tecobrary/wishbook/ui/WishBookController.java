@@ -29,6 +29,7 @@ public class WishBookController {
         return ResponseEntity.ok(wishBookService.findById(savedWishBookId));
     }
 
+    //
     @DeleteMapping("/wishes")
     public ResponseEntity deleteWishBook(@RequestParam final Long id, Model model) {
         wishBookService.deleteWishBook(id);
